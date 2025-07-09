@@ -1,0 +1,845 @@
+---
+---
+
+<div id="profileOnboardingModal" class="profile-modal" style="display: none;">
+	<div class="modal-overlay"></div>
+	<div class="modal-content glass">
+		<div class="modal-header">
+			<h2>🎉 Complete Your Profile</h2>
+			<p>Let's set up your hackathon profile to connect with other participants!</p>
+			<div class="progress-bar">
+				<div class="progress-fill" id="progressFill"></div>
+			</div>
+			<div class="step-indicator">
+				<span class="step-text">Step <span id="currentStep">1</span> of 4</span>
+			</div>
+		</div>
+
+		<form id="profileForm" class="profile-form">
+			<!-- Step 1: Personal Information -->
+			<div class="form-step active" data-step="1">
+				<h3>👤 Personal Information</h3>
+				<div class="form-grid">
+					<div class="form-group">
+						<label for="firstName">First Name *</label>
+						<input type="text" id="firstName" name="first_name" required placeholder="Enter your first name">
+					</div>
+					<div class="form-group">
+						<label for="lastName">Last Name *</label>
+						<input type="text" id="lastName" name="last_name" required placeholder="Enter your last name">
+					</div>
+					<div class="form-group">
+						<label for="dateOfBirth">Date of Birth</label>
+						<input type="date" id="dateOfBirth" name="date_of_birth">
+					</div>
+					<div class="form-group">
+						<label for="gender">Gender</label>
+						<select id="gender" name="gender">
+							<option value="">Select gender</option>
+							<option value="male">Male</option>
+							<option value="female">Female</option>
+							<option value="non-binary">Non-binary</option>
+							<option value="prefer-not-to-say">Prefer not to say</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="phoneNumber">Phone Number</label>
+						<input type="tel" id="phoneNumber" name="phone_number" placeholder="Enter your phone number">
+					</div>
+				</div>
+			</div>
+
+			<!-- Step 2: Location & Background -->
+			<div class="form-step" data-step="2">
+				<h3>🌍 Location & Background</h3>
+				<div class="form-grid">
+					<div class="form-group">
+						<label for="country">Country *</label>
+						<input type="text" id="country" name="country" required placeholder="Enter your country">
+					</div>
+					<div class="form-group">
+						<label for="city">City *</label>
+						<input type="text" id="city" name="city" required placeholder="Enter your city">
+					</div>
+					<div class="form-group">
+						<label for="fieldOfStudy">Field of Study *</label>
+						<select id="fieldOfStudy" name="field_of_study" required>
+							<option value="">Select your field</option>
+							<option value="computer-science">Computer Science</option>
+							<option value="data-science">Data Science</option>
+							<option value="statistics">Statistics</option>
+							<option value="mathematics">Mathematics</option>
+							<option value="engineering">Engineering</option>
+							<option value="business">Business</option>
+							<option value="economics">Economics</option>
+							<option value="physics">Physics</option>
+							<option value="biology">Biology</option>
+							<option value="psychology">Psychology</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="schoolOrCompany">School/Company *</label>
+						<input type="text" id="schoolOrCompany" name="school_or_company" required placeholder="Enter your school or company">
+					</div>
+					<div class="form-group">
+						<label for="currentPosition">Current Position</label>
+						<input type="text" id="currentPosition" name="current_position" placeholder="e.g., Student, Data Analyst, etc.">
+					</div>
+					<div class="form-group">
+						<label for="howHeard">How did you hear about us? *</label>
+						<select id="howHeard" name="how_heard_about_us" required>
+							<option value="">Select an option</option>
+							<option value="social-media">Social Media</option>
+							<option value="friend-referral">Friend Referral</option>
+							<option value="google-search">Google Search</option>
+							<option value="university">University</option>
+							<option value="company">Company</option>
+							<option value="tech-community">Tech Community</option>
+							<option value="newsletter">Newsletter</option>
+							<option value="advertisement">Advertisement</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<!-- Step 3: Profile & Bio -->
+			<div class="form-step" data-step="3">
+				<h3>📸 Profile & Bio</h3>
+				<div class="profile-upload-section">
+					<div class="profile-picture-upload">
+						<div class="upload-area" id="uploadArea">
+							<div class="upload-placeholder">
+								<div class="upload-icon">📷</div>
+								<p>Click to upload profile picture</p>
+								<span class="upload-hint">JPG, PNG up to 5MB</span>
+							</div>
+							<img id="profilePreview" class="profile-preview" style="display: none;" />
+						</div>
+						<input type="file" id="profilePicture" accept="image/*" style="display: none;">
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="bio">Bio</label>
+					<textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself, your interests in data analysis, and what you hope to achieve in this hackathon..."></textarea>
+					<div class="char-counter">
+						<span id="bioCharCount">0</span>/500 characters
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="skills">Skills (Select all that apply)</label>
+					<div class="skills-grid">
+						<label class="skill-item">
+							<input type="checkbox" name="skills" value="python">
+							<span class="skill-tag">Python</span>
+						</label>
+						<label class="skill-item">
+							<input type="checkbox" name="skills" value="r">
+							<span class="skill-tag">R</span>
+						</label>
+						<label class="skill-item">
+							<input type="checkbox" name="skills" value="sql">
+							<span class="skill-tag">SQL</span>
+						</label>
+						<label class="skill-item">
+							<input type="checkbox" name="skills" value="excel">
+							<span class="skill-tag">Excel</span>
+						</label>
+						<label class="skill-item">
+							<input type="checkbox" name="skills" value="tableau">
+							<span class="skill-tag">Tableau</span>
+						</label>
+						<label class="skill-item">
+							<input type="checkbox" name="skills" value="power-bi">
+							<span class="skill-tag">Power BI</span>
+						</label>
+						<label class="skill-item">
+							<input type="checkbox" name="skills" value="machine-learning">
+							<span class="skill-tag">Machine Learning</span>
+						</label>
+						<label class="skill-item">
+							<input type="checkbox" name="skills" value="statistics">
+							<span class="skill-tag">Statistics</span>
+						</label>
+						<label class="skill-item">
+							<input type="checkbox" name="skills" value="data-visualization">
+							<span class="skill-tag">Data Visualization</span>
+						</label>
+						<label class="skill-item">
+							<input type="checkbox" name="skills" value="big-data">
+							<span class="skill-tag">Big Data</span>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Step 4: Social Links -->
+			<div class="form-step" data-step="4">
+				<h3>🔗 Social Links</h3>
+				<p class="step-description">Connect with other participants by sharing your professional profiles (optional)</p>
+				
+				<div class="form-group">
+					<label for="linkedinUrl">LinkedIn Profile</label>
+					<div class="input-with-icon">
+						<span class="input-icon">💼</span>
+						<input type="url" id="linkedinUrl" name="linkedin_url" placeholder="https://linkedin.com/in/yourprofile">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="githubUrl">GitHub Profile</label>
+					<div class="input-with-icon">
+						<span class="input-icon">💻</span>
+						<input type="url" id="githubUrl" name="github_url" placeholder="https://github.com/yourusername">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="portfolioUrl">Portfolio Website</label>
+					<div class="input-with-icon">
+						<span class="input-icon">🌐</span>
+						<input type="url" id="portfolioUrl" name="portfolio_url" placeholder="https://yourportfolio.com">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="interests">Interests (Select all that apply)</label>
+					<div class="interests-grid">
+						<label class="interest-item">
+							<input type="checkbox" name="interests" value="artificial-intelligence">
+							<span class="interest-tag">Artificial Intelligence</span>
+						</label>
+						<label class="interest-item">
+							<input type="checkbox" name="interests" value="machine-learning">
+							<span class="interest-tag">Machine Learning</span>
+						</label>
+						<label class="interest-item">
+							<input type="checkbox" name="interests" value="data-visualization">
+							<span class="interest-tag">Data Visualization</span>
+						</label>
+						<label class="interest-item">
+							<input type="checkbox" name="interests" value="business-intelligence">
+							<span class="interest-tag">Business Intelligence</span>
+						</label>
+						<label class="interest-item">
+							<input type="checkbox" name="interests" value="predictive-analytics">
+							<span class="interest-tag">Predictive Analytics</span>
+						</label>
+						<label class="interest-item">
+							<input type="checkbox" name="interests" value="big-data">
+							<span class="interest-tag">Big Data</span>
+						</label>
+						<label class="interest-item">
+							<input type="checkbox" name="interests" value="data-engineering">
+							<span class="interest-tag">Data Engineering</span>
+						</label>
+						<label class="interest-item">
+							<input type="checkbox" name="interests" value="statistical-analysis">
+							<span class="interest-tag">Statistical Analysis</span>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Navigation Buttons -->
+			<div class="form-navigation">
+				<button type="button" id="prevBtn" class="btn btn-outline" style="display: none;">
+					← Previous
+				</button>
+				<button type="button" id="nextBtn" class="btn btn-primary">
+					Next →
+				</button>
+				<button type="submit" id="submitProfile" class="btn btn-primary" style="display: none;">
+					<span class="btn-text">Complete Profile</span>
+					<span class="btn-loader" style="display: none;">
+						<div class="spinner"></div>
+						Saving...
+					</span>
+				</button>
+			</div>
+		</form>
+
+		<!-- Success Message -->
+		<div id="profileSuccess" class="success-message" style="display: none;">
+			<div class="success-content glass">
+				<div class="success-icon">🎉</div>
+				<h3>Profile Complete!</h3>
+				<p>Welcome to the DataAnalyzer Pro Hackathon community! Your profile has been created successfully.</p>
+				<div class="success-actions">
+					<button onclick="closeProfileModal()" class="btn btn-primary">Continue to Dashboard</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	import { supabase } from '../lib/supabase.ts';
+
+	let currentStep = 1;
+	const totalSteps = 4;
+	let registrationId = null;
+
+	// Initialize profile onboarding
+	function initializeProfileOnboarding(regId) {
+		registrationId = regId;
+		showProfileModal();
+		updateProgress();
+	}
+
+	// Show profile modal
+	function showProfileModal() {
+		const modal = document.getElementById('profileOnboardingModal');
+		if (modal) {
+			modal.style.display = 'flex';
+			document.body.style.overflow = 'hidden';
+		}
+	}
+
+	// Close profile modal
+	function closeProfileModal() {
+		const modal = document.getElementById('profileOnboardingModal');
+		if (modal) {
+			modal.style.display = 'none';
+			document.body.style.overflow = 'auto';
+		}
+	}
+
+	// Update progress bar and step indicator
+	function updateProgress() {
+		const progressFill = document.getElementById('progressFill');
+		const currentStepSpan = document.getElementById('currentStep');
+		const progress = (currentStep / totalSteps) * 100;
+		
+		if (progressFill) progressFill.style.width = `${progress}%`;
+		if (currentStepSpan) currentStepSpan.textContent = currentStep;
+	}
+
+	// Show specific step
+	function showStep(step) {
+		// Hide all steps
+		document.querySelectorAll('.form-step').forEach(stepEl => {
+			stepEl.classList.remove('active');
+		});
+		
+		// Show current step
+		const currentStepEl = document.querySelector(`[data-step="${step}"]`);
+		if (currentStepEl) {
+			currentStepEl.classList.add('active');
+		}
+		
+		// Update navigation buttons
+		const prevBtn = document.getElementById('prevBtn');
+		const nextBtn = document.getElementById('nextBtn');
+		const submitBtn = document.getElementById('submitProfile');
+		
+		if (prevBtn) prevBtn.style.display = step > 1 ? 'block' : 'none';
+		if (nextBtn) nextBtn.style.display = step < totalSteps ? 'block' : 'none';
+		if (submitBtn) submitBtn.style.display = step === totalSteps ? 'block' : 'none';
+		
+		updateProgress();
+	}
+
+	// Validate current step
+	function validateStep(step) {
+		const stepEl = document.querySelector(`[data-step="${step}"]`);
+		if (!stepEl) return false;
+		
+		const requiredFields = stepEl.querySelectorAll('input[required], select[required]');
+		let isValid = true;
+		
+		requiredFields.forEach(field => {
+			if (!field.value.trim()) {
+				field.classList.add('error');
+				isValid = false;
+			} else {
+				field.classList.remove('error');
+			}
+		});
+		
+		return isValid;
+	}
+
+	// Initialize when DOM is loaded
+	document.addEventListener('DOMContentLoaded', () => {
+		// Navigation event listeners
+		const nextBtn = document.getElementById('nextBtn');
+		const prevBtn = document.getElementById('prevBtn');
+		const form = document.getElementById('profileForm');
+
+		if (nextBtn) {
+			nextBtn.addEventListener('click', () => {
+				if (validateStep(currentStep)) {
+					if (currentStep < totalSteps) {
+						currentStep++;
+						showStep(currentStep);
+					}
+				}
+			});
+		}
+
+		if (prevBtn) {
+			prevBtn.addEventListener('click', () => {
+				if (currentStep > 1) {
+					currentStep--;
+					showStep(currentStep);
+				}
+			});
+		}
+
+		// Profile picture upload
+		const uploadArea = document.getElementById('uploadArea');
+		const profilePicture = document.getElementById('profilePicture');
+		const profilePreview = document.getElementById('profilePreview');
+
+		if (uploadArea && profilePicture) {
+			uploadArea.addEventListener('click', () => profilePicture.click());
+			
+			profilePicture.addEventListener('change', (e) => {
+				const file = e.target.files[0];
+				if (file) {
+					const reader = new FileReader();
+					reader.onload = (e) => {
+						if (profilePreview) {
+							profilePreview.src = e.target.result;
+							profilePreview.style.display = 'block';
+							uploadArea.querySelector('.upload-placeholder').style.display = 'none';
+						}
+					};
+					reader.readAsDataURL(file);
+				}
+			});
+		}
+
+		// Bio character counter
+		const bioTextarea = document.getElementById('bio');
+		const charCount = document.getElementById('bioCharCount');
+		
+		if (bioTextarea && charCount) {
+			bioTextarea.addEventListener('input', () => {
+				const count = bioTextarea.value.length;
+				charCount.textContent = count;
+				if (count > 500) {
+					charCount.style.color = '#ef4444';
+				} else {
+					charCount.style.color = 'rgba(255, 255, 255, 0.7)';
+				}
+			});
+		}
+
+		// Form submission
+		if (form) {
+			form.addEventListener('submit', async (e) => {
+				e.preventDefault();
+				await handleProfileSubmission();
+			});
+		}
+	});
+
+	// Handle profile form submission
+	async function handleProfileSubmission() {
+		const submitBtn = document.getElementById('submitProfile');
+		const btnText = submitBtn?.querySelector('.btn-text');
+		const btnLoader = submitBtn?.querySelector('.btn-loader');
+		
+		// Show loading state
+		if (btnText) btnText.style.display = 'none';
+		if (btnLoader) btnLoader.style.display = 'flex';
+		if (submitBtn) submitBtn.disabled = true;
+
+		try {
+			const formData = new FormData(document.getElementById('profileForm'));
+			
+			// Collect skills and interests
+			const skills = Array.from(document.querySelectorAll('input[name="skills"]:checked'))
+				.map(cb => cb.value);
+			const interests = Array.from(document.querySelectorAll('input[name="interests"]:checked'))
+				.map(cb => cb.value);
+
+			const profileData = {
+				registration_id: registrationId,
+				first_name: formData.get('first_name'),
+				last_name: formData.get('last_name'),
+				date_of_birth: formData.get('date_of_birth') || null,
+				gender: formData.get('gender') || null,
+				phone_number: formData.get('phone_number') || null,
+				country: formData.get('country'),
+				city: formData.get('city'),
+				field_of_study: formData.get('field_of_study'),
+				school_or_company: formData.get('school_or_company'),
+				current_position: formData.get('current_position') || null,
+				how_heard_about_us: formData.get('how_heard_about_us'),
+				bio: formData.get('bio') || null,
+				linkedin_url: formData.get('linkedin_url') || null,
+				github_url: formData.get('github_url') || null,
+				portfolio_url: formData.get('portfolio_url') || null,
+				skills: skills,
+				interests: interests,
+				profile_completed: true
+			};
+
+			// Submit to Supabase
+			const { data, error } = await supabase
+				.from('user_profiles')
+				.insert([profileData])
+				.select();
+
+			if (error) {
+				throw error;
+			}
+
+			// Update registration as profile completed
+			await supabase
+				.from('hackathon_registrations')
+				.update({ profile_completed: true })
+				.eq('id', registrationId);
+
+			// Show success message
+			document.getElementById('profileForm').style.display = 'none';
+			document.getElementById('profileSuccess').style.display = 'block';
+
+		} catch (error) {
+			console.error('Profile submission error:', error);
+			alert('Failed to save profile. Please try again.');
+		} finally {
+			// Reset loading state
+			if (btnText) btnText.style.display = 'block';
+			if (btnLoader) btnLoader.style.display = 'none';
+			if (submitBtn) submitBtn.disabled = false;
+		}
+	}
+
+	// Make functions globally available
+	window.initializeProfileOnboarding = initializeProfileOnboarding;
+	window.closeProfileModal = closeProfileModal;
+</script>
+
+<style>
+	.profile-modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 10000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+	}
+
+	.modal-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.8);
+		backdrop-filter: blur(10px);
+	}
+
+	.modal-content {
+		position: relative;
+		max-width: 800px;
+		width: 100%;
+		max-height: 90vh;
+		overflow-y: auto;
+		border-radius: 24px;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		background: rgba(10, 10, 10, 0.95);
+		backdrop-filter: blur(20px);
+	}
+
+	.modal-header {
+		padding: 2rem 2rem 1rem;
+		text-align: center;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.modal-header h2 {
+		color: white;
+		margin-bottom: 0.5rem;
+		font-size: 2rem;
+	}
+
+	.modal-header p {
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 2rem;
+	}
+
+	.progress-bar {
+		width: 100%;
+		height: 6px;
+		background: rgba(255, 255, 255, 0.1);
+		border-radius: 3px;
+		overflow: hidden;
+		margin-bottom: 1rem;
+	}
+
+	.progress-fill {
+		height: 100%;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-radius: 3px;
+		transition: width 0.3s ease;
+		width: 25%;
+	}
+
+	.step-indicator {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.9rem;
+	}
+
+	.profile-form {
+		padding: 2rem;
+	}
+
+	.form-step {
+		display: none;
+	}
+
+	.form-step.active {
+		display: block;
+	}
+
+	.form-step h3 {
+		color: white;
+		margin-bottom: 1.5rem;
+		font-size: 1.5rem;
+	}
+
+	.step-description {
+		color: rgba(255, 255, 255, 0.7);
+		margin-bottom: 2rem;
+		font-size: 1rem;
+	}
+
+	.form-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 1.5rem;
+		margin-bottom: 2rem;
+	}
+
+	.form-group {
+		margin-bottom: 1.5rem;
+	}
+
+	.form-group label {
+		display: block;
+		color: rgba(255, 255, 255, 0.9);
+		margin-bottom: 0.5rem;
+		font-weight: 500;
+	}
+
+	.form-group input,
+	.form-group select,
+	.form-group textarea {
+		width: 100%;
+		padding: 1rem;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		border-radius: 12px;
+		color: white;
+		font-size: 1rem;
+		transition: all 0.3s ease;
+	}
+
+	.form-group input:focus,
+	.form-group select:focus,
+	.form-group textarea:focus {
+		outline: none;
+		border-color: #667eea;
+		background: rgba(255, 255, 255, 0.08);
+		box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+	}
+
+	.form-group input.error,
+	.form-group select.error {
+		border-color: #ef4444;
+		box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+	}
+
+	.input-with-icon {
+		position: relative;
+	}
+
+	.input-icon {
+		position: absolute;
+		left: 1rem;
+		top: 50%;
+		transform: translateY(-50%);
+		font-size: 1.2rem;
+		z-index: 1;
+	}
+
+	.input-with-icon input {
+		padding-left: 3rem;
+	}
+
+	.profile-upload-section {
+		margin-bottom: 2rem;
+	}
+
+	.profile-picture-upload {
+		display: flex;
+		justify-content: center;
+		margin-bottom: 2rem;
+	}
+
+	.upload-area {
+		width: 150px;
+		height: 150px;
+		border: 2px dashed rgba(255, 255, 255, 0.3);
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.upload-area:hover {
+		border-color: #667eea;
+		background: rgba(102, 126, 234, 0.1);
+	}
+
+	.upload-placeholder {
+		text-align: center;
+		color: rgba(255, 255, 255, 0.7);
+	}
+
+	.upload-icon {
+		font-size: 2rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.upload-placeholder p {
+		font-size: 0.9rem;
+		margin: 0.5rem 0;
+	}
+
+	.upload-hint {
+		font-size: 0.8rem;
+		color: rgba(255, 255, 255, 0.5);
+	}
+
+	.profile-preview {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 50%;
+	}
+
+	.char-counter {
+		text-align: right;
+		font-size: 0.8rem;
+		color: rgba(255, 255, 255, 0.7);
+		margin-top: 0.5rem;
+	}
+
+	.skills-grid,
+	.interests-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		gap: 1rem;
+	}
+
+	.skill-item,
+	.interest-item {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+	}
+
+	.skill-item input,
+	.interest-item input {
+		display: none;
+	}
+
+	.skill-tag,
+	.interest-tag {
+		padding: 0.75rem 1rem;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		border-radius: 20px;
+		color: rgba(255, 255, 255, 0.8);
+		font-size: 0.9rem;
+		transition: all 0.3s ease;
+		width: 100%;
+		text-align: center;
+	}
+
+	.skill-item input:checked + .skill-tag,
+	.interest-item input:checked + .interest-tag {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-color: #667eea;
+		color: white;
+	}
+
+	.form-navigation {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 3rem;
+		padding-top: 2rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.success-message {
+		padding: 3rem;
+		text-align: center;
+	}
+
+	.success-content {
+		padding: 3rem;
+		border-radius: 20px;
+		border: 1px solid rgba(16, 185, 129, 0.3);
+		background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+	}
+
+	.success-icon {
+		font-size: 4rem;
+		margin-bottom: 1rem;
+	}
+
+	.success-content h3 {
+		color: white;
+		margin-bottom: 1rem;
+		font-size: 1.8rem;
+	}
+
+	.success-content p {
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 2rem;
+	}
+
+	@media (max-width: 768px) {
+		.profile-modal {
+			padding: 1rem;
+		}
+
+		.modal-content {
+			max-height: 95vh;
+		}
+
+		.form-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.skills-grid,
+		.interests-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.form-navigation {
+			flex-direction: column;
+			gap: 1rem;
+		}
+	}
+</style>

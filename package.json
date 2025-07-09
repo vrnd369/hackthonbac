@@ -1,0 +1,20 @@
+{
+  "name": "@example/basics",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.2.5",
+    "@supabase/supabase-js": "^2.39.0",
+    "@stripe/stripe-js": "^2.4.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1"
+  }
+}

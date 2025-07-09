@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Flow Test</title>
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <h1>Payment Flow Test</h1>
+
+    <div id="payment-element">
+      <!-- Stripe Elements will be mounted here -->
+    </div>
+
+    <button id="test-submit">Test Submit</button>
+    <div id="result"></div>
+
+    <script>
+      // Test Stripe configuration
+      const stripe = Stripe(
+        "pk_live_51RbPL8B98Drnw31WYAvCGXl1nvqEvEun69A2YH6VVsjCJmiEZj2l3jGADdndMqzZdj75aPheCY1DHafrJ6diYn7a00FXb3Fqv5"
+      );
+
+      async function testPaymentFlow() {
+        try {
+          console.log("Testing payment flow...");
+
+          // Create a test payment intent
+          const response = await fetch(
+            "https://rnwgojmxlvgrtnozxmlc.supabase.co/functions/v1/create-payment-intent",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization:
+                  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJud2dvam14bHZncnRub3p4bWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyNjU1MjksImV4cCI6MjA2NTg0MTUyOX0._gA3hl3QP1pDNUO-4s0ilGgkXot39-G4qt3IqeDlGHw",
+              },
+              body: JSON.stringify({
+                amount: 10,
+                currency: "usd",
+                description: "Test Payment",
+                metadata: { test: true },
+              }),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              `Payment intent creation failed: ${response.status}`
+            );
+          }
+
+          const { client_secret } = await response.json();
+          console.log(
+            "Payment intent created:",
+            client_secret ? "Success" : "Failed"
+          );
+
+          // Create elements
+          const elements = stripe.elements({
+            clientSecret: client_secret,
+            appearance: { theme: "night" },
+          });
+
+          console.log("Elements created:", elements ? "Success" : "Failed");
+
+          // Create payment element
+          const paymentElement = elements.create("payment");
+          paymentElement.mount("#payment-element");
+
+          console.log("Payment element mounted");
+
+          // Test submit
+          document
+            .getElementById("test-submit")
+            .addEventListener("click", async () => {
+              try {
+                console.log("Testing submit...");
+                const { error } = await elements.submit();
+                if (error) {
+                  console.error("Submit error:", error);
+                  document.getElementById(
+                    "result"
+                  ).innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+                } else {
+                  console.log("Submit successful");
+                  document.getElementById("result").innerHTML =
+                    '<p style="color: green;">Submit successful!</p>';
+                }
+              } catch (error) {
+                console.error("Submit failed:", error);
+                document.getElementById(
+                  "result"
+                ).innerHTML = `<p style="color: red;">Submit failed: ${error.message}</p>`;
+              }
+            });
+        } catch (error) {
+          console.error("Test failed:", error);
+          document.getElementById(
+            "result"
+          ).innerHTML = `<p style="color: red;">Test failed: ${error.message}</p>`;
+        }
+      }
+
+      // Run the test
+      testPaymentFlow();
+    </script>
+  </body>
+</html>

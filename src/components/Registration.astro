@@ -1,0 +1,1051 @@
+---
+import PaymentModal from './PaymentModal.astro';
+import ProfileOnboarding from './ProfileOnboarding.astro';
+---
+
+<section id="register" class="section section-alt">
+	<div class="container">
+		<div class="registration-content">
+			<div class="registration-info animate-on-scroll">
+				<h2>📩 How to Participate</h2>
+				<div class="steps-timeline">
+					<div class="step animate-on-scroll">
+						<div class="step-connector"></div>
+						<div class="step-number floating">1</div>
+						<div class="step-content">
+							<h4>Register Now</h4>
+							<p>Fill out the registration form and submit your details to secure your spot in this exciting hackathon.</p>
+							<div class="step-time">⏱️ 2 minutes</div>
+						</div>
+					</div>
+
+					<div class="step animate-on-scroll">
+						<div class="step-connector"></div>
+						<div class="step-number floating">2</div>
+						<div class="step-content">
+							<h4>Receive Welcome Kit</h4>
+							<p>Get your comprehensive welcome kit with datasets, guidelines, and all necessary resources to get started.</p>
+							<div class="step-time">📧 Within 24 hours</div>
+						</div>
+					</div>
+
+					<div class="step animate-on-scroll">
+						<div class="step-connector"></div>
+						<div class="step-number floating">3</div>
+						<div class="step-content">
+							<h4>Choose Your Track</h4>
+							<p>Select one or more tracks that align with your interests and expertise, then start your analysis journey.</p>
+							<div class="step-time">🎯 Event day</div>
+						</div>
+					</div>
+
+					<div class="step animate-on-scroll">
+						<div class="step-connector"></div>
+						<div class="step-number floating">4</div>
+						<div class="step-content">
+							<h4>Submit Analysis</h4>
+							<p>Complete your comprehensive analysis and submit your findings before the deadline for expert judging.</p>
+							<div class="step-time">⏰ 48-hour deadline</div>
+						</div>
+					</div>
+
+					<div class="step animate-on-scroll">
+						<div class="step-connector last"></div>
+						<div class="step-number floating">5</div>
+						<div class="step-content">
+							<h4>Join Award Ceremony</h4>
+							<p>Attend the exciting closing session and award ceremony to celebrate achievements and see the results.</p>
+							<div class="step-time">🏆 Final day</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="registration-form">
+				<div class="form-card card glass">
+					<div class="form-header">
+						<h3>🚀 Ready to Join?</h3>
+						<p>Register now for the DataAnalyzer Pro Hackathon 2025</p>
+						<div class="registration-stats">
+							<div class="stat">
+								<span class="stat-number">1000+</span>
+								<span class="stat-label">Registered</span>
+							</div>
+							<div class="stat">
+								<span class="stat-number">48</span>
+								<span class="stat-label">Hours Left</span>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Registration Form -->
+					<form id="registrationForm" class="registration-form-container">
+						<div class="form-section">
+							<h4>📝 Personal Information</h4>
+							<div class="form-group">
+								<label for="name">Full Name *</label>
+								<input type="text" id="name" name="name" required placeholder="Enter your full name">
+							</div>
+							<div class="form-group">
+								<label for="email">Email Address *</label>
+								<input type="email" id="email" name="email" required placeholder="Enter your email address">
+							</div>
+							<div class="form-group">
+								<label for="phone">Phone Number (Optional)</label>
+								<input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+							</div>
+						</div>
+
+						<div class="form-section">
+							<h4>🎯 Experience & Interests</h4>
+							<div class="form-group">
+								<label for="experience">Experience Level *</label>
+								<select id="experience" name="experience" required>
+									<option value="">Select your experience level</option>
+									<option value="beginner">Beginner (0-1 years)</option>
+									<option value="intermediate">Intermediate (1-3 years)</option>
+									<option value="advanced">Advanced (3+ years)</option>
+									<option value="expert">Expert (5+ years)</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="tracks">Tracks of Interest (Select multiple)</label>
+								<div class="checkbox-group">
+									<label class="checkbox-item">
+										<input type="checkbox" name="tracks" value="storytelling">
+										<span class="checkmark"></span>
+										Data Storytelling Olympics
+									</label>
+									<label class="checkbox-item">
+										<input type="checkbox" name="tracks" value="battle-royale">
+										<span class="checkmark"></span>
+										Insight Battle Royale
+									</label>
+									<label class="checkbox-item">
+										<input type="checkbox" name="tracks" value="ai-vs-human">
+										<span class="checkmark"></span>
+										AI vs. Human
+									</label>
+									<label class="checkbox-item">
+										<input type="checkbox" name="tracks" value="data-for-good">
+										<span class="checkmark"></span>
+										Data for Good
+									</label>
+									<label class="checkbox-item">
+										<input type="checkbox" name="tracks" value="blind-test">
+										<span class="checkmark"></span>
+										The Blind Data Test
+									</label>
+									<label class="checkbox-item">
+										<input type="checkbox" name="tracks" value="insight-bot">
+										<span class="checkmark"></span>
+										Build Your Own Insight Bot
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="motivation">What motivates you to join? (Optional)</label>
+								<textarea id="motivation" name="motivation" rows="3" placeholder="Tell us what excites you about this hackathon..."></textarea>
+							</div>
+						</div>
+
+						<div class="form-section">
+							<h4>💳 Registration</h4>
+							<div class="registration-options">
+								<label class="option-card featured glass selected">
+									<input type="radio" name="registration_type" value="premium" required checked>
+									<div class="featured-badge">🔥 Premium Access</div>
+									<div class="option-content">
+										<div class="option-header">
+											<h5>Premium Registration</h5>
+											<div class="option-price">$10</div>
+										</div>
+										<div class="option-features">
+											<div class="feature">✅ Full hackathon access</div>
+											<div class="feature">✅ All datasets & resources</div>
+											<div class="feature">✅ Certificate of participation</div>
+											<div class="feature">⭐ Priority support</div>
+											<div class="feature">⭐ Exclusive resources</div>
+											<div class="feature">⭐ Premium community access</div>
+											<div class="feature">⭐ Special recognition</div>
+										</div>
+									</div>
+								</label>
+							</div>
+						</div>
+
+						<div class="form-actions">
+							<button type="submit" class="btn btn-primary submit-btn" id="submitBtn">
+								<span class="btn-text">Complete Registration</span>
+								<span class="btn-loader" style="display: none;">
+									<div class="spinner"></div>
+									Registering...
+								</span>
+							</button>
+						</div>
+					</form>
+
+					<!-- Success Message -->
+					<div id="successMessage" class="success-message" style="display: none;">
+						<div class="success-content glass">
+							<div class="success-icon">🎉</div>
+							<h4>Registration Successful!</h4>
+							<p>Thank you for registering! You'll receive a confirmation email with your welcome kit within 24 hours.</p>
+							<div class="success-actions">
+								<a href="#" class="btn btn-outline">Join Discord</a>
+								<button onclick="resetForm()" class="btn">Register Another</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Error Message -->
+					<div id="errorMessage" class="error-message" style="display: none;">
+						<div class="error-content glass">
+							<div class="error-icon">❌</div>
+							<h4>Registration Failed</h4>
+							<p id="errorText">Something went wrong. Please try again.</p>
+							<button onclick="hideError()" class="btn btn-outline">Try Again</button>
+						</div>
+					</div>
+
+					<div class="contact-info glass">
+						<h4>❓ Questions?</h4>
+						<p>Contact us at <a href="mailto:info@dataanalyzerpro.com">info@dataanalyzerpro.com</a></p>
+						<div class="social-links">
+							<a href="#" class="social-link">💬 Discord</a>
+							<a href="#" class="social-link">📱 Twitter</a>
+							<a href="#" class="social-link">💼 LinkedIn</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Payment Modal -->
+			<PaymentModal />
+			
+			<!-- Profile Onboarding Modal -->
+			<ProfileOnboarding />
+		</div>
+	</div>
+</section>
+
+<script>
+	import { supabase } from '../lib/supabase.ts';
+	import { getStripe } from '../lib/stripe.ts';
+
+	// Global variables
+	let elements: any;
+	let paymentElement: any;
+	let currentRegistrationData: any;
+	let currentRegistrationId: string;
+	let form: HTMLFormElement;
+	let successMessage: HTMLElement;
+	let errorMessage: HTMLElement;
+	let errorText: HTMLElement;
+	let paymentModal: HTMLElement;
+
+	// Wait for DOM to be ready
+	document.addEventListener('DOMContentLoaded', () => {
+		console.log('DOM loaded, initializing form...');
+		initializeForm();
+	});
+
+	function initializeForm() {
+		// Form elements
+		form = document.getElementById('registrationForm') as HTMLFormElement;
+		const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+		successMessage = document.getElementById('successMessage') as HTMLElement;
+		errorMessage = document.getElementById('errorMessage') as HTMLElement;
+		errorText = document.getElementById('errorText') as HTMLElement;
+		paymentModal = document.getElementById('paymentModal') as HTMLElement;
+
+		// Check if elements exist
+		if (!form) {
+			console.error('Registration form not found');
+			return;
+		}
+		if (!submitBtn) {
+			console.error('Submit button not found');
+			return;
+		}
+
+		console.log('Form elements found, setting up event listeners...');
+
+		// Add click handler to button for debugging
+		submitBtn.addEventListener('click', (e) => {
+			console.log('Button clicked!');
+			alert('Button clicked! Form validation will proceed...');
+		});
+
+		// Form submission handler
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			console.log('Form submission started');
+			console.log('Form data:', new FormData(form));
+			console.log('Supabase available:', !!supabase);
+			
+			// Show loading state
+			setLoadingState(true);
+			hideMessages();
+
+			try {
+				// Collect form data
+				const formData = new FormData(form);
+				console.log('Form data collected');
+				
+				const selectedTracks = Array.from(form.querySelectorAll('input[name="tracks"]:checked'))
+					.map((checkbox: any) => checkbox.value);
+
+				const registrationData = {
+					name: formData.get('name') as string,
+					email: formData.get('email') as string,
+					phone: formData.get('phone') as string || null,
+					experience_level: formData.get('experience') as string,
+					motivation: formData.get('motivation') as string || null,
+					tracks_interested: selectedTracks,
+					registration_type: formData.get('registration_type') as 'free' | 'premium'
+				};
+
+				console.log('Registration data prepared:', registrationData);
+
+				// Validate required fields
+				console.log('Validating fields:', {
+					name: registrationData.name,
+					email: registrationData.email,
+					experience_level: registrationData.experience_level,
+					registration_type: registrationData.registration_type
+				});
+				
+				if (!registrationData.name || !registrationData.email || !registrationData.experience_level || !registrationData.registration_type) {
+					throw new Error('Please fill in all required fields');
+				}
+
+				console.log('Validation passed, submitting to Supabase...');
+
+				// Check Supabase connection
+				if (!supabase) {
+					throw new Error('Database connection not available');
+				}
+
+				// Submit to Supabase
+				const { data, error } = await supabase
+					.from('hackathon_registrations')
+					.insert([{
+						...registrationData,
+						payment_status: 'pending',
+						amount_paid: 10.00
+					}])
+					.select();
+
+				if (error) {
+					console.error('Supabase error:', error);
+					throw new Error(`Database error: ${error.message}`);
+				}
+
+				if (!data || data.length === 0) {
+					throw new Error('No data returned from registration');
+				}
+
+				console.log('Registration successful:', data);
+
+				// Initialize payment for premium registration
+				currentRegistrationData = registrationData;
+				currentRegistrationId = data[0].id;
+				await initializePayment(registrationData);
+
+			} catch (error) {
+				console.error('Registration error:', error);
+				const errorMessage = (error as any).message || 'Registration failed. Please try again.';
+				console.error('Error details:', errorMessage);
+				showError(errorMessage);
+			} finally {
+				setLoadingState(false);
+			}
+		});
+
+		// Payment handling is now done in PaymentModal component
+
+		// Premium option is pre-selected, no need for radio button handling
+
+		console.log('Form initialization complete');
+	}
+
+	// Helper functions
+	function setLoadingState(loading: boolean) {
+		const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+		if (!submitBtn) return;
+		
+		const btnText = submitBtn.querySelector('.btn-text');
+		const btnLoader = submitBtn.querySelector('.btn-loader');
+		
+		if (loading) {
+			if (btnText) (btnText as HTMLElement).style.display = 'none';
+			if (btnLoader) (btnLoader as HTMLElement).style.display = 'flex';
+			submitBtn.disabled = true;
+		} else {
+			if (btnText) (btnText as HTMLElement).style.display = 'block';
+			if (btnLoader) (btnLoader as HTMLElement).style.display = 'none';
+			submitBtn.disabled = false;
+		}
+	}
+
+	function showSuccess() {
+		if (!form || !successMessage) return;
+		form.style.display = 'none';
+		successMessage.style.display = 'block';
+		successMessage.scrollIntoView({ behavior: 'smooth' });
+	}
+
+	function showError(message: string) {
+		if (!errorText || !errorMessage) return;
+		errorText.textContent = message;
+		errorMessage.style.display = 'block';
+		errorMessage.scrollIntoView({ behavior: 'smooth' });
+	}
+
+	function hideMessages() {
+		if (successMessage) successMessage.style.display = 'none';
+		if (errorMessage) errorMessage.style.display = 'none';
+	}
+
+	// Initialize Stripe payment
+	async function initializePayment(registrationData: any) {
+		try {
+			console.log('Initializing payment...'); // Debug log
+
+			// Get Stripe instance
+			const stripe = await getStripe();
+			if (!stripe) {
+				throw new Error('Stripe not initialized');
+			}
+			
+			console.log('Stripe instance:', stripe);
+			console.log('Stripe publishable key:', import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+			// Show payment modal first
+			showPaymentModal();
+
+			// Create payment intent AFTER showing modal
+			const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+			const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+			
+			if (!supabaseUrl || !supabaseKey) {
+				throw new Error('Missing payment configuration');
+			}
+
+			console.log('Creating payment intent for registration:', currentRegistrationId);
+
+			const response = await fetch(`${supabaseUrl}/functions/v1/create-payment-intent`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${supabaseKey}`,
+				},
+				body: JSON.stringify({
+					amount: 10, // $10 in dollars
+					currency: 'usd',
+					description: 'DataAnalyzer Pro Hackathon 2025 - Premium Registration',
+					metadata: {
+						registration_id: currentRegistrationId,
+						participant_name: registrationData.name,
+						participant_email: registrationData.email,
+					},
+				}),
+			});
+
+			if (!response.ok) {
+				const errorText = await response.text();
+				console.error('Payment intent creation failed:', response.status, errorText);
+				throw new Error(`Payment service error: ${response.status} - ${errorText}`);
+			}
+
+			const result = await response.json();
+			console.log('Payment intent response:', result);
+			
+			const { client_secret } = result;
+			if (!client_secret) {
+				throw new Error('No client secret received from payment intent creation');
+			}
+			
+			console.log('Payment intent created with client secret length:', client_secret.length);
+
+			// Create payment elements
+			console.log('Creating Stripe Elements with client secret...');
+			try {
+				elements = stripe.elements({
+					clientSecret: client_secret,
+					appearance: {
+						theme: 'night',
+						variables: {
+							colorPrimary: '#667eea',
+							colorBackground: 'rgba(255, 255, 255, 0.05)',
+							colorText: 'white',
+							colorDanger: '#ef4444',
+							fontFamily: 'Inter, system-ui, sans-serif',
+							spacingUnit: '4px',
+							borderRadius: '12px',
+						},
+					},
+				});
+
+				console.log('Stripe Elements created, creating payment element...');
+				paymentElement = elements.create('payment');
+				
+				// Wait for the payment element to be ready
+				await new Promise((resolve) => {
+					paymentElement.mount('#payment-element');
+					setTimeout(resolve, 500); // Give time for the element to mount
+				});
+				
+				console.log('Payment element mounted successfully');
+			} catch (elementsError: unknown) {
+				console.error('Stripe Elements creation failed:', elementsError);
+				const errorMessage = elementsError instanceof Error ? elementsError.message : String(elementsError);
+				throw new Error(`Failed to create payment form: ${errorMessage}`);
+			}
+			
+			// Set payment elements in the modal
+			(window as any).setPaymentElements?.(elements, paymentElement);
+			
+			// Set registration ID globally for the payment modal
+			(window as any).currentRegistrationId = currentRegistrationId;
+
+		} catch (error) {
+			console.error('Payment initialization error:', error);
+			showError(`Failed to initialize payment: ${(error as any).message}`);
+		}
+	}
+
+	// Payment handling is now done in PaymentModal component
+
+	// Payment modal functions
+	function showPaymentModal() {
+		if (!paymentModal) return;
+		paymentModal.style.display = 'flex';
+		document.body.style.overflow = 'hidden';
+	}
+
+	// closePaymentModal is now handled in PaymentModal component
+
+	// Payment loading state is now handled in PaymentModal component
+
+	function initializeProfileOnboarding(registrationId: string) {
+		// This function will be implemented when ProfileOnboarding component is ready
+		console.log('Initializing profile onboarding for registration:', registrationId);
+		showSuccess();
+		if (form) form.reset();
+	}
+
+	// Global functions for buttons
+	(window as any).resetForm = function() {
+		const form = document.getElementById('registrationForm') as HTMLFormElement;
+		const successMessage = document.getElementById('successMessage') as HTMLElement;
+		if (!form || !successMessage) return;
+		form.style.display = 'block';
+		successMessage.style.display = 'none';
+		form.reset();
+	};
+
+	(window as any).hideError = function() {
+		const errorMessage = document.getElementById('errorMessage') as HTMLElement;
+		if (!errorMessage) return;
+		errorMessage.style.display = 'none';
+	};
+
+	// Payment modal functions are now handled in PaymentModal component
+</script>
+
+<style>
+	.registration-content {
+		display: grid;
+		grid-template-columns: 1.2fr 1fr;
+		gap: 4rem;
+		align-items: start;
+	}
+
+	.registration-info h2 {
+		margin-bottom: 3rem;
+		color: white;
+		font-size: 2.5rem;
+	}
+
+	.steps-timeline {
+		position: relative;
+	}
+
+	.step {
+		display: flex;
+		gap: 2rem;
+		align-items: flex-start;
+		margin-bottom: 3rem;
+		position: relative;
+	}
+
+	.step-connector {
+		position: absolute;
+		left: 25px;
+		top: 60px;
+		width: 2px;
+		height: 80px;
+		background: linear-gradient(180deg, #667eea 0%, rgba(102, 126, 234, 0.3) 100%);
+	}
+
+	.step-connector.last {
+		display: none;
+	}
+
+	.step-number {
+		width: 50px;
+		height: 50px;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 800;
+		font-size: 1.2rem;
+		flex-shrink: 0;
+		box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+		border: 3px solid rgba(255, 255, 255, 0.2);
+		z-index: 1;
+		position: relative;
+	}
+
+	.step-content {
+		flex: 1;
+	}
+
+	.step-content h4 {
+		margin-bottom: 0.75rem;
+		color: white;
+		font-size: 1.4rem;
+		font-weight: 700;
+	}
+
+	.step-content p {
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 1rem;
+		line-height: 1.6;
+		font-size: 1rem;
+	}
+
+	.step-time {
+		display: inline-block;
+		padding: 0.5rem 1rem;
+		background: rgba(102, 126, 234, 0.2);
+		color: #a5b4fc;
+		border-radius: 20px;
+		font-size: 0.9rem;
+		font-weight: 500;
+		border: 1px solid rgba(102, 126, 234, 0.3);
+	}
+
+	.form-card {
+		position: sticky;
+		top: 2rem;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.form-header {
+		text-align: center;
+		margin-bottom: 2rem;
+	}
+
+	.form-header h3 {
+		color: white;
+		margin-bottom: 0.5rem;
+		font-size: 2rem;
+	}
+
+	.form-header > p {
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 2rem;
+		font-size: 1.1rem;
+	}
+
+	.registration-stats {
+		display: flex;
+		justify-content: center;
+		gap: 2rem;
+	}
+
+	.stat {
+		text-align: center;
+	}
+
+	.stat-number {
+		display: block;
+		font-size: 1.8rem;
+		font-weight: 800;
+		color: #667eea;
+		line-height: 1;
+	}
+
+	.stat-label {
+		font-size: 0.9rem;
+		color: rgba(255, 255, 255, 0.7);
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+	/* Form Styles */
+	.registration-form-container {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.form-section {
+		background: rgba(255, 255, 255, 0.03);
+		padding: 2rem;
+		border-radius: 16px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.form-section h4 {
+		color: white;
+		margin-bottom: 1.5rem;
+		font-size: 1.3rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.form-group {
+		margin-bottom: 1.5rem;
+	}
+
+	.form-group label {
+		display: block;
+		color: rgba(255, 255, 255, 0.9);
+		margin-bottom: 0.5rem;
+		font-weight: 500;
+		font-size: 1rem;
+	}
+
+	.form-group input,
+	.form-group select,
+	.form-group textarea {
+		width: 100%;
+		padding: 1rem;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		border-radius: 12px;
+		color: white;
+		font-size: 1rem;
+	}
+
+	.form-group input:focus,
+	.form-group select:focus,
+	.form-group textarea:focus {
+		outline: none;
+		border-color: #667eea;
+		background: rgba(255, 255, 255, 0.08);
+		box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+	}
+
+	.form-group input::placeholder,
+	.form-group textarea::placeholder {
+		color: rgba(255, 255, 255, 0.5);
+	}
+
+	.checkbox-group {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.checkbox-item {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 12px;
+		cursor: pointer;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.checkbox-item input[type="checkbox"] {
+		display: none;
+	}
+
+	.checkmark {
+		width: 20px;
+		height: 20px;
+		border: 2px solid rgba(255, 255, 255, 0.3);
+		border-radius: 4px;
+		position: relative;
+	}
+
+	.checkbox-item input[type="checkbox"]:checked + .checkmark {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-color: #667eea;
+	}
+
+	.checkbox-item input[type="checkbox"]:checked + .checkmark::after {
+		content: '✓';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: white;
+		font-weight: bold;
+		font-size: 12px;
+	}
+
+	.registration-options {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.option-card {
+		padding: 2rem;
+		border-radius: 16px;
+		position: relative;
+		border: 2px solid rgba(255, 255, 255, 0.1);
+		cursor: pointer;
+	}
+
+	.option-card input[type="radio"] {
+		display: none;
+	}
+
+	.option-card input[type="radio"]:checked + .option-content {
+		border-color: rgba(102, 126, 234, 0.6);
+	}
+
+	.option-card.featured {
+		border-color: rgba(102, 126, 234, 0.5);
+		background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+	}
+
+	.option-card.selected {
+		border-color: rgba(102, 126, 234, 0.8);
+		background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%);
+		box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+	}
+
+	.featured-badge {
+		position: absolute;
+		top: -12px;
+		right: 1rem;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+		padding: 0.4rem 1rem;
+		border-radius: 20px;
+		font-size: 0.8rem;
+		font-weight: 600;
+		box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+	}
+
+	.option-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1.5rem;
+	}
+
+	.option-header h5 {
+		color: white;
+		font-size: 1.3rem;
+		margin: 0;
+	}
+
+	.option-price {
+		font-size: 2rem;
+		font-weight: 800;
+		color: #667eea;
+	}
+
+	.option-features {
+		margin-bottom: 0;
+	}
+
+	.feature {
+		padding: 0.5rem 0;
+		color: rgba(255, 255, 255, 0.9);
+		font-size: 0.95rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.feature:last-child {
+		border-bottom: none;
+	}
+
+	.form-actions {
+		margin-top: 2rem;
+	}
+
+	.submit-btn {
+		width: 100%;
+		justify-content: center;
+		font-size: 1.1rem;
+		padding: 1.25rem;
+		position: relative;
+	}
+
+	.btn-loader {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.spinner {
+		width: 20px;
+		height: 20px;
+		border: 2px solid rgba(255, 255, 255, 0.3);
+		border-top: 2px solid white;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+	}
+
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+
+	/* Success and Error Messages */
+	.success-message,
+	.error-message {
+		margin-top: 2rem;
+	}
+
+	.success-content,
+	.error-content {
+		text-align: center;
+		padding: 3rem;
+		border-radius: 20px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.success-content {
+		background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+		border-color: rgba(16, 185, 129, 0.3);
+	}
+
+	.error-content {
+		background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+		border-color: rgba(239, 68, 68, 0.3);
+	}
+
+	.success-icon,
+	.error-icon {
+		font-size: 4rem;
+		margin-bottom: 1rem;
+	}
+
+	.success-content h4,
+	.error-content h4 {
+		color: white;
+		margin-bottom: 1rem;
+		font-size: 1.8rem;
+	}
+
+	.success-content p,
+	.error-content p {
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 2rem;
+		font-size: 1.1rem;
+	}
+
+	.success-actions {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.contact-info {
+		text-align: center;
+		padding: 2rem;
+		border-radius: 12px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		margin-top: 2rem;
+	}
+
+	.contact-info h4 {
+		margin-bottom: 1rem;
+		color: white;
+		font-size: 1.2rem;
+	}
+
+	.contact-info p {
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 1.5rem;
+	}
+
+	.contact-info a {
+		color: #667eea;
+		text-decoration: none;
+		font-weight: 600;
+	}
+
+	.contact-info a:hover {
+		text-decoration: underline;
+	}
+
+	.social-links {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.social-link {
+		padding: 0.5rem 1rem;
+		background: rgba(102, 126, 234, 0.2);
+		color: #a5b4fc !important;
+		text-decoration: none;
+		border-radius: 20px;
+		font-size: 0.9rem;
+		font-weight: 500;
+		border: 1px solid rgba(102, 126, 234, 0.3);
+	}
+
+	@media (max-width: 768px) {
+		.registration-content {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+
+		.form-card {
+			position: static;
+		}
+
+		.step {
+			gap: 1rem;
+		}
+
+		.step-connector {
+			left: 20px;
+		}
+
+		.step-number {
+			width: 40px;
+			height: 40px;
+			font-size: 1rem;
+		}
+
+		.registration-stats {
+			flex-direction: column;
+			gap: 1rem;
+		}
+
+		.social-links {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.form-section {
+			padding: 1.5rem;
+		}
+
+		.success-actions {
+			flex-direction: column;
+			align-items: center;
+		}
+	}
+</style>

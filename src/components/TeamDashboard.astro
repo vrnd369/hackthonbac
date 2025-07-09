@@ -1,0 +1,612 @@
+---
+import TeamSubmission from './TeamSubmission.astro';
+---
+
+<section class="team-dashboard">
+	<div class="container">
+		<div class="dashboard-header">
+			<h2>🏆 Team Dashboard</h2>
+			<p>Manage your team and submit your hackathon project</p>
+		</div>
+
+		<div class="dashboard-content">
+			<!-- Team Info Card -->
+			<div class="team-info-card card glass">
+				<div class="team-header">
+					<h3 id="teamName">Loading...</h3>
+					<div class="team-status" id="teamStatus">
+						<span class="status-indicator"></span>
+						<span class="status-text">Active</span>
+					</div>
+				</div>
+				
+				<div class="team-details">
+					<div class="detail-item">
+						<span class="detail-label">Members:</span>
+						<span class="detail-value" id="memberCount">-</span>
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">Leader:</span>
+						<span class="detail-value" id="teamLeader">-</span>
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">Created:</span>
+						<span class="detail-value" id="teamCreated">-</span>
+					</div>
+				</div>
+
+				<div class="team-actions">
+					<button id="manageTeamBtn" class="btn btn-outline">Manage Team</button>
+					<button id="submitProjectBtn" class="btn btn-primary">
+						📁 Submit Project
+					</button>
+				</div>
+			</div>
+
+			<!-- Team Members -->
+			<div class="team-members-card card glass">
+				<h3>👥 Team Members</h3>
+				<div class="members-list" id="membersList">
+					<div class="loading-state">Loading team members...</div>
+				</div>
+			</div>
+
+			<!-- Project Submission Status -->
+			<div class="submission-status-card card glass">
+				<h3>📋 Project Submission</h3>
+				<div class="submission-overview" id="submissionOverview">
+					<div class="submission-item">
+						<span class="submission-icon">📄</span>
+						<div class="submission-info">
+							<span class="submission-label">Executive Summary</span>
+							<span class="submission-status" id="executiveSummaryStatus">Not uploaded</span>
+						</div>
+					</div>
+					<div class="submission-item">
+						<span class="submission-icon">📊</span>
+						<div class="submission-info">
+							<span class="submission-label">Presentation Slides</span>
+							<span class="submission-status" id="presentationSlidesStatus">Not uploaded</span>
+						</div>
+					</div>
+					<div class="submission-item">
+						<span class="submission-icon">🐍</span>
+						<div class="submission-info">
+							<span class="submission-label">Python Code</span>
+							<span class="submission-status" id="pythonCodeStatus">Not uploaded</span>
+						</div>
+					</div>
+					<div class="submission-item">
+						<span class="submission-icon">🎥</span>
+						<div class="submission-info">
+							<span class="submission-label">Video Presentation</span>
+							<span class="submission-status" id="videoPresentationStatus">Not uploaded</span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="submission-actions">
+					<div class="submission-deadline">
+						<span class="deadline-icon">⏰</span>
+						<span class="deadline-text">Deadline: July 26, 2025 at 11:59 PM</span>
+					</div>
+					<button id="openSubmissionBtn" class="btn btn-primary">
+						📁 Manage Submissions
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Team Submission Modal -->
+		<TeamSubmission />
+	</div>
+</section>
+
+<script>
+	import { supabase } from '../lib/supabase.ts';
+
+	let currentUser = null;
+	let currentTeam = null;
+	let currentSubmission = null;
+
+	// Initialize dashboard
+	document.addEventListener('DOMContentLoaded', async () => {
+		await loadUserAndTeam();
+		setupEventListeners();
+	});
+
+	// Load user and team data
+	async function loadUserAndTeam() {
+		try {
+			// Get current user
+			const { data: { user }, error: userError } = await supabase.auth.getUser();
+			if (userError || !user) {
+				window.location.href = '/login'; // Redirect to login if not authenticated
+				return;
+			}
+			currentUser = user;
+
+			// Get user profile and team
+			const { data: profile, error: profileError } = await supabase
+				.from('user_profiles')
+				.select(`
+					*,
+					teams!inner(*)
+				`)
+				.eq('user_id', user.id)
+				.single();
+
+			if (profileError || !profile || !profile.teams) {
+				showNoTeamMessage();
+				return;
+			}
+
+			currentTeam = profile.teams;
+			await loadTeamDetails();
+			await loadSubmissionStatus();
+
+		} catch (error) {
+			console.error('Error loading user and team:', error);
+			showErrorMessage('Failed to load team information');
+		}
+	}
+
+	// Load detailed team information
+	async function loadTeamDetails() {
+		if (!currentTeam) return;
+
+		try {
+			// Get team details with members
+			const { data: teamDetails, error } = await supabase
+				.from('team_details')
+				.select('*')
+				.eq('id', currentTeam.id)
+				.single();
+
+			if (error) {
+				throw error;
+			}
+
+			// Update UI
+			updateTeamInfo(teamDetails);
+			updateMembersList(teamDetails.members || []);
+
+		} catch (error) {
+			console.error('Error loading team details:', error);
+		}
+	}
+
+	// Load submission status
+	async function loadSubmissionStatus() {
+		if (!currentTeam) return;
+
+		try {
+			const { data: submission, error } = await supabase
+				.from('team_submissions')
+				.select('*')
+				.eq('team_id', currentTeam.id)
+				.single();
+
+			if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+				throw error;
+			}
+
+			currentSubmission = submission;
+			updateSubmissionStatus(submission);
+
+		} catch (error) {
+			console.error('Error loading submission status:', error);
+		}
+	}
+
+	// Update team info display
+	function updateTeamInfo(teamDetails) {
+		const teamName = document.getElementById('teamName');
+		const memberCount = document.getElementById('memberCount');
+		const teamLeader = document.getElementById('teamLeader');
+		const teamCreated = document.getElementById('teamCreated');
+
+		if (teamName) teamName.textContent = teamDetails.name;
+		if (memberCount) memberCount.textContent = `${teamDetails.current_members}/${teamDetails.max_members}`;
+		if (teamLeader) teamLeader.textContent = teamDetails.leader_name;
+		if (teamCreated) {
+			const date = new Date(teamDetails.created_at);
+			teamCreated.textContent = date.toLocaleDateString();
+		}
+	}
+
+	// Update members list
+	function updateMembersList(members) {
+		const membersList = document.getElementById('membersList');
+		if (!membersList) return;
+
+		if (members.length === 0) {
+			membersList.innerHTML = '<div class="no-members">No members found</div>';
+			return;
+		}
+
+		membersList.innerHTML = members.map(member => `
+			<div class="member-item">
+				<div class="member-avatar">
+					${member.avatar ? 
+						`<img src="${member.avatar}" alt="${member.name}">` : 
+						`<div class="avatar-placeholder">${member.name.charAt(0)}</div>`
+					}
+				</div>
+				<div class="member-info">
+					<span class="member-name">${member.name}</span>
+					<span class="member-role">${member.field_of_study || 'Team Member'}</span>
+					${member.is_leader ? '<span class="leader-badge">Leader</span>' : ''}
+				</div>
+			</div>
+		`).join('');
+	}
+
+	// Update submission status
+	function updateSubmissionStatus(submission) {
+		const statusElements = {
+			executiveSummaryStatus: submission?.executive_summary_url,
+			presentationSlidesStatus: submission?.presentation_slides_url,
+			pythonCodeStatus: submission?.python_code_url,
+			videoPresentationStatus: submission?.video_presentation_url
+		};
+
+		Object.entries(statusElements).forEach(([elementId, hasFile]) => {
+			const element = document.getElementById(elementId);
+			if (element) {
+				element.textContent = hasFile ? 'Uploaded ✅' : 'Not uploaded';
+				element.className = `submission-status ${hasFile ? 'uploaded' : 'not-uploaded'}`;
+			}
+		});
+	}
+
+	// Setup event listeners
+	function setupEventListeners() {
+		const submitProjectBtn = document.getElementById('submitProjectBtn');
+		const openSubmissionBtn = document.getElementById('openSubmissionBtn');
+
+		if (submitProjectBtn) {
+			submitProjectBtn.addEventListener('click', () => {
+				if (currentTeam) {
+					initializeTeamSubmission(currentTeam.id);
+				}
+			});
+		}
+
+		if (openSubmissionBtn) {
+			openSubmissionBtn.addEventListener('click', () => {
+				if (currentTeam) {
+					initializeTeamSubmission(currentTeam.id);
+				}
+			});
+		}
+	}
+
+	// Show no team message
+	function showNoTeamMessage() {
+		const dashboardContent = document.querySelector('.dashboard-content');
+		if (dashboardContent) {
+			dashboardContent.innerHTML = `
+				<div class="no-team-message card glass">
+					<h3>👥 No Team Found</h3>
+					<p>You need to be part of a team to access the team dashboard.</p>
+					<div class="no-team-actions">
+						<a href="/teams" class="btn btn-primary">Browse Teams</a>
+						<a href="/create-team" class="btn btn-outline">Create Team</a>
+					</div>
+				</div>
+			`;
+		}
+	}
+
+	// Show error message
+	function showErrorMessage(message) {
+		const dashboardContent = document.querySelector('.dashboard-content');
+		if (dashboardContent) {
+			dashboardContent.innerHTML = `
+				<div class="error-message card glass">
+					<h3>❌ Error</h3>
+					<p>${message}</p>
+					<button onclick="location.reload()" class="btn btn-outline">Retry</button>
+				</div>
+			`;
+		}
+	}
+</script>
+
+<style>
+	.team-dashboard {
+		padding: 4rem 0;
+		min-height: 100vh;
+		background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+	}
+
+	.dashboard-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+
+	.dashboard-header h2 {
+		color: white;
+		margin-bottom: 1rem;
+		font-size: 2.5rem;
+	}
+
+	.dashboard-header p {
+		color: rgba(255, 255, 255, 0.8);
+		font-size: 1.2rem;
+	}
+
+	.dashboard-content {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.team-info-card {
+		grid-column: 1 / -1;
+	}
+
+	.team-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 2rem;
+	}
+
+	.team-header h3 {
+		color: white;
+		margin: 0;
+		font-size: 1.8rem;
+	}
+
+	.team-status {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.status-indicator {
+		width: 10px;
+		height: 10px;
+		background: #10b981;
+		border-radius: 50%;
+	}
+
+	.status-text {
+		color: #10b981;
+		font-weight: 500;
+	}
+
+	.team-details {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1.5rem;
+		margin-bottom: 2rem;
+	}
+
+	.detail-item {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.detail-label {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.9rem;
+	}
+
+	.detail-value {
+		color: white;
+		font-weight: 600;
+		font-size: 1.1rem;
+	}
+
+	.team-actions {
+		display: flex;
+		gap: 1rem;
+		justify-content: flex-end;
+	}
+
+	.team-members-card h3,
+	.submission-status-card h3 {
+		color: white;
+		margin-bottom: 1.5rem;
+		font-size: 1.4rem;
+	}
+
+	.members-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.member-item {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 12px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.member-avatar {
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		overflow: hidden;
+	}
+
+	.member-avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.avatar-placeholder {
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-weight: 600;
+		font-size: 1.2rem;
+	}
+
+	.member-info {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.member-name {
+		color: white;
+		font-weight: 600;
+	}
+
+	.member-role {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.9rem;
+	}
+
+	.leader-badge {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+		padding: 0.25rem 0.75rem;
+		border-radius: 12px;
+		font-size: 0.8rem;
+		font-weight: 500;
+		align-self: flex-start;
+		margin-top: 0.25rem;
+	}
+
+	.submission-overview {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		margin-bottom: 2rem;
+	}
+
+	.submission-item {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 12px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.submission-icon {
+		font-size: 1.5rem;
+	}
+
+	.submission-info {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.submission-label {
+		color: white;
+		font-weight: 500;
+	}
+
+	.submission-status {
+		font-size: 0.9rem;
+	}
+
+	.submission-status.uploaded {
+		color: #10b981;
+	}
+
+	.submission-status.not-uploaded {
+		color: rgba(255, 255, 255, 0.6);
+	}
+
+	.submission-actions {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-top: 1rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.submission-deadline {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: rgba(255, 255, 255, 0.8);
+		font-size: 0.9rem;
+	}
+
+	.deadline-icon {
+		color: #f59e0b;
+	}
+
+	.no-team-message,
+	.error-message {
+		grid-column: 1 / -1;
+		text-align: center;
+		padding: 3rem;
+	}
+
+	.no-team-message h3,
+	.error-message h3 {
+		color: white;
+		margin-bottom: 1rem;
+		font-size: 1.8rem;
+	}
+
+	.no-team-message p,
+	.error-message p {
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 2rem;
+	}
+
+	.no-team-actions {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+	}
+
+	.loading-state {
+		color: rgba(255, 255, 255, 0.6);
+		text-align: center;
+		padding: 2rem;
+	}
+
+	@media (max-width: 768px) {
+		.dashboard-content {
+			grid-template-columns: 1fr;
+		}
+
+		.team-header {
+			flex-direction: column;
+			gap: 1rem;
+			text-align: center;
+		}
+
+		.team-actions {
+			justify-content: center;
+		}
+
+		.submission-actions {
+			flex-direction: column;
+			gap: 1rem;
+			text-align: center;
+		}
+
+		.no-team-actions {
+			flex-direction: column;
+			align-items: center;
+		}
+	}
+</style>

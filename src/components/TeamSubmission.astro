@@ -1,0 +1,900 @@
+---
+---
+
+<div id="teamSubmissionModal" class="submission-modal" style="display: none;">
+	<div class="modal-overlay"></div>
+	<div class="modal-content glass">
+		<div class="modal-header">
+			<h2>📁 Team Project Submission</h2>
+			<p>Upload your team's hackathon project files</p>
+			<button class="close-btn" onclick="closeSubmissionModal()">×</button>
+		</div>
+
+		<div class="submission-content">
+			<!-- Submission Status -->
+			<div class="submission-status" id="submissionStatus">
+				<div class="status-indicator">
+					<span class="status-icon">📝</span>
+					<div class="status-text">
+						<span class="status-label">Status:</span>
+						<span class="status-value" id="statusValue">Draft</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- File Upload Sections -->
+			<div class="upload-sections">
+				<!-- Executive Summary -->
+				<div class="upload-section">
+					<div class="section-header">
+						<h3>📄 Executive Summary</h3>
+						<span class="file-types">PDF, DOC, DOCX</span>
+					</div>
+					<div class="upload-area" data-file-type="executive_summary">
+						<input type="file" id="executiveSummaryFile" accept=".pdf,.doc,.docx" style="display: none;">
+						<div class="upload-placeholder">
+							<div class="upload-icon">📄</div>
+							<p>Click to upload Executive Summary</p>
+							<span class="upload-hint">Max 100MB</span>
+						</div>
+						<div class="file-info" style="display: none;">
+							<div class="file-details">
+								<span class="file-name"></span>
+								<span class="file-size"></span>
+							</div>
+							<div class="file-actions">
+								<button class="btn-upload">Upload</button>
+								<button class="btn-remove">Remove</button>
+							</div>
+						</div>
+						<div class="upload-progress" style="display: none;">
+							<div class="progress-bar">
+								<div class="progress-fill"></div>
+							</div>
+							<span class="progress-text">Uploading...</span>
+						</div>
+						<div class="upload-success" style="display: none;">
+							<span class="success-icon">✅</span>
+							<span class="success-text">Uploaded successfully</span>
+							<a class="view-file" href="#" target="_blank">View File</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Presentation Slides -->
+				<div class="upload-section">
+					<div class="section-header">
+						<h3>📊 Presentation Slides</h3>
+						<span class="file-types">PDF, PPT, PPTX</span>
+					</div>
+					<div class="upload-area" data-file-type="presentation_slides">
+						<input type="file" id="presentationSlidesFile" accept=".pdf,.ppt,.pptx" style="display: none;">
+						<div class="upload-placeholder">
+							<div class="upload-icon">📊</div>
+							<p>Click to upload Presentation Slides</p>
+							<span class="upload-hint">Max 100MB</span>
+						</div>
+						<div class="file-info" style="display: none;">
+							<div class="file-details">
+								<span class="file-name"></span>
+								<span class="file-size"></span>
+							</div>
+							<div class="file-actions">
+								<button class="btn-upload">Upload</button>
+								<button class="btn-remove">Remove</button>
+							</div>
+						</div>
+						<div class="upload-progress" style="display: none;">
+							<div class="progress-bar">
+								<div class="progress-fill"></div>
+							</div>
+							<span class="progress-text">Uploading...</span>
+						</div>
+						<div class="upload-success" style="display: none;">
+							<span class="success-icon">✅</span>
+							<span class="success-text">Uploaded successfully</span>
+							<a class="view-file" href="#" target="_blank">View File</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Python Code -->
+				<div class="upload-section">
+					<div class="section-header">
+						<h3>🐍 Python Code</h3>
+						<span class="file-types">PY, IPYNB, TXT</span>
+					</div>
+					<div class="upload-area" data-file-type="python_code">
+						<input type="file" id="pythonCodeFile" accept=".py,.ipynb,.txt" style="display: none;">
+						<div class="upload-placeholder">
+							<div class="upload-icon">🐍</div>
+							<p>Click to upload Python Code</p>
+							<span class="upload-hint">Max 10MB</span>
+						</div>
+						<div class="file-info" style="display: none;">
+							<div class="file-details">
+								<span class="file-name"></span>
+								<span class="file-size"></span>
+							</div>
+							<div class="file-actions">
+								<button class="btn-upload">Upload</button>
+								<button class="btn-remove">Remove</button>
+							</div>
+						</div>
+						<div class="upload-progress" style="display: none;">
+							<div class="progress-bar">
+								<div class="progress-fill"></div>
+							</div>
+							<span class="progress-text">Uploading...</span>
+						</div>
+						<div class="upload-success" style="display: none;">
+							<span class="success-icon">✅</span>
+							<span class="success-text">Uploaded successfully</span>
+							<a class="view-file" href="#" target="_blank">View File</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Video Presentation -->
+				<div class="upload-section">
+					<div class="section-header">
+						<h3>🎥 Video Presentation</h3>
+						<span class="file-types">MP4, AVI, MOV, WEBM</span>
+					</div>
+					<div class="upload-area" data-file-type="video_presentation">
+						<input type="file" id="videoPresentationFile" accept=".mp4,.avi,.mov,.webm" style="display: none;">
+						<div class="upload-placeholder">
+							<div class="upload-icon">🎥</div>
+							<p>Click to upload Video Presentation</p>
+							<span class="upload-hint">Max 500MB, 4 minutes max</span>
+						</div>
+						<div class="file-info" style="display: none;">
+							<div class="file-details">
+								<span class="file-name"></span>
+								<span class="file-size"></span>
+							</div>
+							<div class="file-actions">
+								<button class="btn-upload">Upload</button>
+								<button class="btn-remove">Remove</button>
+							</div>
+						</div>
+						<div class="upload-progress" style="display: none;">
+							<div class="progress-bar">
+								<div class="progress-fill"></div>
+							</div>
+							<span class="progress-text">Uploading...</span>
+						</div>
+						<div class="upload-success" style="display: none;">
+							<span class="success-icon">✅</span>
+							<span class="success-text">Uploaded successfully</span>
+							<a class="view-file" href="#" target="_blank">View File</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Submission Actions -->
+			<div class="submission-actions">
+				<div class="submission-info">
+					<p>📋 <strong>Requirements:</strong> Upload at least one file to submit your project</p>
+					<p>⏰ <strong>Deadline:</strong> July 26, 2025 at 11:59 PM</p>
+				</div>
+				<div class="action-buttons">
+					<button id="saveAsDraft" class="btn btn-outline">Save as Draft</button>
+					<button id="submitProject" class="btn btn-primary" disabled>
+						<span class="btn-text">Submit Project</span>
+						<span class="btn-loader" style="display: none;">
+							<div class="spinner"></div>
+							Submitting...
+						</span>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Success Message -->
+		<div id="submissionSuccess" class="success-message" style="display: none;">
+			<div class="success-content glass">
+				<div class="success-icon">🎉</div>
+				<h3>Project Submitted Successfully!</h3>
+				<p>Your team's project has been submitted for review. Good luck!</p>
+				<div class="success-actions">
+					<button onclick="closeSubmissionModal()" class="btn btn-primary">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	import { supabase } from '../lib/supabase.ts';
+
+	let currentTeamId = null;
+	let currentSubmission = null;
+	let uploadedFiles = {
+		executive_summary: null,
+		presentation_slides: null,
+		python_code: null,
+		video_presentation: null
+	};
+
+	// Initialize team submission modal
+	function initializeTeamSubmission(teamId) {
+		currentTeamId = teamId;
+		showSubmissionModal();
+		loadExistingSubmission();
+	}
+
+	// Show submission modal
+	function showSubmissionModal() {
+		const modal = document.getElementById('teamSubmissionModal');
+		if (modal) {
+			modal.style.display = 'flex';
+			document.body.style.overflow = 'hidden';
+		}
+	}
+
+	// Close submission modal
+	function closeSubmissionModal() {
+		const modal = document.getElementById('teamSubmissionModal');
+		if (modal) {
+			modal.style.display = 'none';
+			document.body.style.overflow = 'auto';
+		}
+	}
+
+	// Load existing submission data
+	async function loadExistingSubmission() {
+		if (!currentTeamId) return;
+
+		try {
+			const { data, error } = await supabase
+				.from('team_submissions')
+				.select('*')
+				.eq('team_id', currentTeamId)
+				.single();
+
+			if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+				throw error;
+			}
+
+			if (data) {
+				currentSubmission = data;
+				updateSubmissionStatus(data.submission_status);
+				
+				// Update UI with existing files
+				const fileTypes = ['executive_summary', 'presentation_slides', 'python_code', 'video_presentation'];
+				fileTypes.forEach(fileType => {
+					const url = data[`${fileType}_url`];
+					if (url) {
+						showUploadSuccess(fileType, url);
+						uploadedFiles[fileType] = url;
+					}
+				});
+				
+				updateSubmitButton();
+			}
+		} catch (error) {
+			console.error('Error loading submission:', error);
+		}
+	}
+
+	// Update submission status display
+	function updateSubmissionStatus(status) {
+		const statusValue = document.getElementById('statusValue');
+		const statusIndicator = document.querySelector('.status-indicator');
+		
+		if (statusValue) {
+			statusValue.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+		}
+		
+		if (statusIndicator) {
+			statusIndicator.className = `status-indicator status-${status}`;
+		}
+	}
+
+	// Initialize when DOM is loaded
+	document.addEventListener('DOMContentLoaded', () => {
+		// Set up file upload areas
+		const uploadAreas = document.querySelectorAll('.upload-area');
+		uploadAreas.forEach(area => {
+			const fileType = area.dataset.fileType;
+			const fileInput = area.querySelector('input[type="file"]');
+			const placeholder = area.querySelector('.upload-placeholder');
+			const fileInfo = area.querySelector('.file-info');
+			const uploadBtn = area.querySelector('.btn-upload');
+			const removeBtn = area.querySelector('.btn-remove');
+
+			// Click to select file
+			placeholder.addEventListener('click', () => fileInput.click());
+
+			// File selection
+			fileInput.addEventListener('change', (e) => {
+				const file = e.target.files[0];
+				if (file) {
+					showFileInfo(area, file);
+				}
+			});
+
+			// Upload button
+			uploadBtn.addEventListener('click', () => {
+				const file = fileInput.files[0];
+				if (file) {
+					uploadFile(fileType, file, area);
+				}
+			});
+
+			// Remove button
+			removeBtn.addEventListener('click', () => {
+				fileInput.value = '';
+				hideFileInfo(area);
+			});
+		});
+
+		// Submit buttons
+		const saveAsDraftBtn = document.getElementById('saveAsDraft');
+		const submitProjectBtn = document.getElementById('submitProject');
+
+		if (saveAsDraftBtn) {
+			saveAsDraftBtn.addEventListener('click', () => saveSubmission('draft'));
+		}
+
+		if (submitProjectBtn) {
+			submitProjectBtn.addEventListener('click', () => saveSubmission('submitted'));
+		}
+	});
+
+	// Show file info after selection
+	function showFileInfo(area, file) {
+		const placeholder = area.querySelector('.upload-placeholder');
+		const fileInfo = area.querySelector('.file-info');
+		const fileName = fileInfo.querySelector('.file-name');
+		const fileSize = fileInfo.querySelector('.file-size');
+
+		fileName.textContent = file.name;
+		fileSize.textContent = formatFileSize(file.size);
+
+		placeholder.style.display = 'none';
+		fileInfo.style.display = 'block';
+	}
+
+	// Hide file info
+	function hideFileInfo(area) {
+		const placeholder = area.querySelector('.upload-placeholder');
+		const fileInfo = area.querySelector('.file-info');
+		const progress = area.querySelector('.upload-progress');
+		const success = area.querySelector('.upload-success');
+
+		fileInfo.style.display = 'none';
+		progress.style.display = 'none';
+		success.style.display = 'none';
+		placeholder.style.display = 'block';
+	}
+
+	// Show upload progress
+	function showUploadProgress(area) {
+		const fileInfo = area.querySelector('.file-info');
+		const progress = area.querySelector('.upload-progress');
+
+		fileInfo.style.display = 'none';
+		progress.style.display = 'block';
+	}
+
+	// Show upload success
+	function showUploadSuccess(fileType, fileUrl) {
+		const area = document.querySelector(`[data-file-type="${fileType}"]`);
+		if (!area) return;
+
+		const fileInfo = area.querySelector('.file-info');
+		const progress = area.querySelector('.upload-progress');
+		const success = area.querySelector('.upload-success');
+		const viewFileLink = success.querySelector('.view-file');
+
+		fileInfo.style.display = 'none';
+		progress.style.display = 'none';
+		success.style.display = 'block';
+		
+		if (viewFileLink) {
+			viewFileLink.href = fileUrl;
+		}
+	}
+
+	// Upload file
+	async function uploadFile(fileType, file, area) {
+		if (!currentTeamId) {
+			alert('No team selected');
+			return;
+		}
+
+		showUploadProgress(area);
+
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
+			formData.append('file_type', fileType);
+			formData.append('team_id', currentTeamId);
+
+			const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/upload-project-file`, {
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+				},
+				body: formData
+			});
+
+			const result = await response.json();
+
+			if (!result.success) {
+				throw new Error(result.error);
+			}
+
+			// Update uploaded files tracking
+			uploadedFiles[fileType] = result.file_url;
+			currentSubmission = result.submission;
+
+			// Show success
+			showUploadSuccess(fileType, result.file_url);
+			updateSubmitButton();
+
+		} catch (error) {
+			console.error('Upload error:', error);
+			alert(`Upload failed: ${error.message}`);
+			hideFileInfo(area);
+		}
+	}
+
+	// Save submission with status
+	async function saveSubmission(status) {
+		if (!currentTeamId || !currentSubmission) {
+			alert('No submission to save');
+			return;
+		}
+
+		const submitBtn = document.getElementById('submitProject');
+		const btnText = submitBtn?.querySelector('.btn-text');
+		const btnLoader = submitBtn?.querySelector('.btn-loader');
+
+		// Show loading state
+		if (btnText) btnText.style.display = 'none';
+		if (btnLoader) btnLoader.style.display = 'flex';
+		if (submitBtn) submitBtn.disabled = true;
+
+		try {
+			const { data, error } = await supabase
+				.from('team_submissions')
+				.update({ 
+					submission_status: status,
+					updated_at: new Date().toISOString()
+				})
+				.eq('team_id', currentTeamId)
+				.select()
+				.single();
+
+			if (error) {
+				throw error;
+			}
+
+			currentSubmission = data;
+			updateSubmissionStatus(status);
+
+			if (status === 'submitted') {
+				// Show success message
+				document.querySelector('.submission-content').style.display = 'none';
+				document.getElementById('submissionSuccess').style.display = 'block';
+			} else {
+				alert('Submission saved as draft');
+			}
+
+		} catch (error) {
+			console.error('Save error:', error);
+			alert(`Failed to save submission: ${error.message}`);
+		} finally {
+			// Reset loading state
+			if (btnText) btnText.style.display = 'block';
+			if (btnLoader) btnLoader.style.display = 'none';
+			if (submitBtn) submitBtn.disabled = false;
+		}
+	}
+
+	// Update submit button state
+	function updateSubmitButton() {
+		const submitBtn = document.getElementById('submitProject');
+		if (!submitBtn) return;
+
+		const hasFiles = Object.values(uploadedFiles).some(url => url !== null);
+		submitBtn.disabled = !hasFiles;
+	}
+
+	// Format file size
+	function formatFileSize(bytes) {
+		if (bytes === 0) return '0 Bytes';
+		const k = 1024;
+		const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+		const i = Math.floor(Math.log(bytes) / Math.log(k));
+		return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+	}
+
+	// Make functions globally available
+	window.initializeTeamSubmission = initializeTeamSubmission;
+	window.closeSubmissionModal = closeSubmissionModal;
+</script>
+
+<style>
+	.submission-modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 10000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+	}
+
+	.modal-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.8);
+		backdrop-filter: blur(10px);
+	}
+
+	.modal-content {
+		position: relative;
+		max-width: 900px;
+		width: 100%;
+		max-height: 90vh;
+		overflow-y: auto;
+		border-radius: 24px;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		background: rgba(10, 10, 10, 0.95);
+		backdrop-filter: blur(20px);
+	}
+
+	.modal-header {
+		padding: 2rem 2rem 1rem;
+		text-align: center;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		position: relative;
+	}
+
+	.modal-header h2 {
+		color: white;
+		margin-bottom: 0.5rem;
+		font-size: 2rem;
+	}
+
+	.modal-header p {
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 0;
+	}
+
+	.close-btn {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		background: none;
+		border: none;
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 2rem;
+		cursor: pointer;
+		padding: 0;
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		transition: all 0.3s ease;
+	}
+
+	.close-btn:hover {
+		background: rgba(255, 255, 255, 0.1);
+		color: white;
+	}
+
+	.submission-content {
+		padding: 2rem;
+	}
+
+	.submission-status {
+		margin-bottom: 2rem;
+		padding: 1.5rem;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 12px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.status-indicator {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.status-icon {
+		font-size: 1.5rem;
+	}
+
+	.status-text {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.status-label {
+		font-size: 0.9rem;
+		color: rgba(255, 255, 255, 0.7);
+	}
+
+	.status-value {
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: white;
+	}
+
+	.status-indicator.status-draft .status-value {
+		color: #f59e0b;
+	}
+
+	.status-indicator.status-submitted .status-value {
+		color: #10b981;
+	}
+
+	.status-indicator.status-reviewed .status-value {
+		color: #667eea;
+	}
+
+	.upload-sections {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+		gap: 2rem;
+		margin-bottom: 3rem;
+	}
+
+	.upload-section {
+		background: rgba(255, 255, 255, 0.03);
+		border-radius: 16px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		overflow: hidden;
+	}
+
+	.section-header {
+		padding: 1.5rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.section-header h3 {
+		color: white;
+		margin: 0;
+		font-size: 1.2rem;
+	}
+
+	.file-types {
+		font-size: 0.8rem;
+		color: rgba(255, 255, 255, 0.6);
+		background: rgba(255, 255, 255, 0.1);
+		padding: 0.25rem 0.75rem;
+		border-radius: 12px;
+	}
+
+	.upload-area {
+		padding: 2rem;
+		min-height: 150px;
+		position: relative;
+	}
+
+	.upload-placeholder {
+		text-align: center;
+		cursor: pointer;
+		padding: 2rem;
+		border: 2px dashed rgba(255, 255, 255, 0.3);
+		border-radius: 12px;
+		transition: all 0.3s ease;
+	}
+
+	.upload-placeholder:hover {
+		border-color: #667eea;
+		background: rgba(102, 126, 234, 0.1);
+	}
+
+	.upload-icon {
+		font-size: 2.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.upload-placeholder p {
+		color: rgba(255, 255, 255, 0.8);
+		margin: 0.5rem 0;
+		font-size: 1rem;
+	}
+
+	.upload-hint {
+		color: rgba(255, 255, 255, 0.5);
+		font-size: 0.8rem;
+	}
+
+	.file-info {
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 12px;
+		padding: 1.5rem;
+	}
+
+	.file-details {
+		margin-bottom: 1rem;
+	}
+
+	.file-name {
+		display: block;
+		color: white;
+		font-weight: 600;
+		margin-bottom: 0.25rem;
+	}
+
+	.file-size {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.9rem;
+	}
+
+	.file-actions {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.btn-upload,
+	.btn-remove {
+		padding: 0.5rem 1rem;
+		border: none;
+		border-radius: 8px;
+		font-size: 0.9rem;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+
+	.btn-upload {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+	}
+
+	.btn-remove {
+		background: rgba(255, 255, 255, 0.1);
+		color: rgba(255, 255, 255, 0.8);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+	}
+
+	.upload-progress {
+		text-align: center;
+		padding: 2rem;
+	}
+
+	.progress-bar {
+		width: 100%;
+		height: 6px;
+		background: rgba(255, 255, 255, 0.1);
+		border-radius: 3px;
+		overflow: hidden;
+		margin-bottom: 1rem;
+	}
+
+	.progress-fill {
+		height: 100%;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-radius: 3px;
+		animation: progress-animation 2s ease-in-out infinite;
+	}
+
+	@keyframes progress-animation {
+		0% { width: 0%; }
+		50% { width: 70%; }
+		100% { width: 100%; }
+	}
+
+	.progress-text {
+		color: rgba(255, 255, 255, 0.8);
+		font-size: 0.9rem;
+	}
+
+	.upload-success {
+		text-align: center;
+		padding: 2rem;
+		background: rgba(16, 185, 129, 0.1);
+		border-radius: 12px;
+		border: 1px solid rgba(16, 185, 129, 0.3);
+	}
+
+	.success-icon {
+		font-size: 2rem;
+		margin-bottom: 0.5rem;
+		display: block;
+	}
+
+	.success-text {
+		color: #10b981;
+		font-weight: 600;
+		margin-bottom: 1rem;
+		display: block;
+	}
+
+	.view-file {
+		color: #667eea;
+		text-decoration: none;
+		font-size: 0.9rem;
+		font-weight: 500;
+	}
+
+	.view-file:hover {
+		text-decoration: underline;
+	}
+
+	.submission-actions {
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		padding-top: 2rem;
+	}
+
+	.submission-info {
+		margin-bottom: 2rem;
+	}
+
+	.submission-info p {
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 0.5rem;
+		font-size: 0.95rem;
+	}
+
+	.action-buttons {
+		display: flex;
+		gap: 1rem;
+		justify-content: flex-end;
+	}
+
+	.success-message {
+		padding: 3rem;
+		text-align: center;
+	}
+
+	.success-content {
+		padding: 3rem;
+		border-radius: 20px;
+		border: 1px solid rgba(16, 185, 129, 0.3);
+		background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+	}
+
+	.success-content .success-icon {
+		font-size: 4rem;
+		margin-bottom: 1rem;
+	}
+
+	.success-content h3 {
+		color: white;
+		margin-bottom: 1rem;
+		font-size: 1.8rem;
+	}
+
+	.success-content p {
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 2rem;
+	}
+
+	@media (max-width: 768px) {
+		.submission-modal {
+			padding: 1rem;
+		}
+
+		.modal-content {
+			max-height: 95vh;
+		}
+
+		.upload-sections {
+			grid-template-columns: 1fr;
+		}
+
+		.action-buttons {
+			flex-direction: column;
+		}
+	}
+</style>

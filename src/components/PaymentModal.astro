@@ -1,0 +1,500 @@
+---
+---
+
+<div id="paymentModal" class="payment-modal" style="display: none;">
+	<div class="modal-overlay"></div>
+	<div class="modal-content glass">
+		<div class="modal-header">
+			<h3>💳 Complete Your Premium Registration</h3>
+			<button class="close-btn" onclick="closePaymentModal()">×</button>
+		</div>
+		
+		<div class="payment-info">
+			<div class="registration-summary">
+				<h4>Registration Summary</h4>
+				<div class="summary-item">
+					<span>Premium Hackathon Registration</span>
+					<span class="price">$10.00</span>
+				</div>
+				<div class="summary-total">
+					<span>Total</span>
+					<span class="total-price">$10.00</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="payment-form">
+			<div id="payment-element">
+				<!-- Stripe Elements will create form elements here -->
+				<div class="payment-loading" id="payment-loading">
+					<div class="spinner"></div>
+					<p>Setting up payment form...</p>
+				</div>
+			</div>
+			
+			<div class="payment-actions">
+				<button id="submit-payment" class="btn btn-primary" disabled>
+					<span class="btn-text">Complete Payment</span>
+					<span class="btn-loader" style="display: none;">
+						<div class="spinner"></div>
+						Processing...
+					</span>
+				</button>
+				<button onclick="closePaymentModal()" class="btn btn-outline">Cancel</button>
+			</div>
+		</div>
+
+		<div class="payment-security">
+			<div class="security-badges">
+				<div class="security-badge">
+					<span class="security-icon">🔒</span>
+					<span>SSL Secured</span>
+				</div>
+				<div class="security-badge">
+					<span class="security-icon">💳</span>
+					<span>Stripe Powered</span>
+				</div>
+				<div class="security-badge">
+					<span class="security-icon">🛡️</span>
+					<span>PCI Compliant</span>
+				</div>
+			</div>
+			<p class="security-text">Your payment information is secure and encrypted.</p>
+		</div>
+	</div>
+</div>
+
+<script>
+	import { getStripe } from '../lib/stripe.ts';
+
+	// Extend Window interface
+	declare global {
+		interface Window {
+			currentRegistrationId?: string;
+		}
+	}
+
+	// Global variables for payment
+	let elements: any;
+	let paymentElement: any;
+
+	// Wait for DOM to be ready
+	document.addEventListener('DOMContentLoaded', () => {
+		console.log('PaymentModal: DOM loaded');
+		initializePaymentHandlers();
+	});
+
+	function initializePaymentHandlers() {
+		const submitPaymentBtn = document.getElementById('submit-payment');
+		const modalOverlay = document.querySelector('.modal-overlay');
+		
+		console.log('PaymentModal: Initializing payment handlers');
+		console.log('Submit payment button:', submitPaymentBtn);
+
+		if (submitPaymentBtn) {
+			submitPaymentBtn.addEventListener('click', handlePaymentSubmission);
+			console.log('PaymentModal: Payment button event listener added');
+		} else {
+			console.error('PaymentModal: Submit payment button not found');
+		}
+
+		if (modalOverlay) {
+			modalOverlay.addEventListener('click', closePaymentModal);
+		}
+	}
+
+	// Handle payment submission
+	async function handlePaymentSubmission() {
+		console.log('PaymentModal: Payment submission started');
+		
+		const submitPaymentBtn = document.getElementById('submit-payment') as HTMLButtonElement;
+		if (!submitPaymentBtn) {
+			console.error('PaymentModal: Submit button not found');
+			return;
+		}
+
+		// Set loading state
+		setPaymentLoadingState(true);
+
+		try {
+			// Get Stripe instance
+			const stripe = await getStripe();
+			if (!stripe) {
+				throw new Error('Stripe not initialized');
+			}
+
+			if (!elements) {
+				throw new Error('Payment elements not initialized');
+			}
+
+			// Check if payment element container exists
+			const paymentElementContainer = document.getElementById('payment-element');
+			if (!paymentElementContainer) {
+				throw new Error('Payment element container not found');
+			}
+
+			console.log('PaymentModal: Submitting payment to Stripe...');
+			console.log('PaymentModal: Elements object:', elements);
+			console.log('PaymentModal: Payment element container:', paymentElementContainer);
+
+			// Check if elements are ready
+			if (!elements || typeof elements.submit !== 'function') {
+				throw new Error('Stripe Elements not properly initialized');
+			}
+
+			// Submit the payment
+			try {
+				const { error: submitError } = await elements.submit();
+				if (submitError) {
+					console.error('PaymentModal: Submit error:', submitError);
+					throw submitError;
+				}
+			} catch (submitError: unknown) {
+				console.error('PaymentModal: Elements submit failed:', submitError);
+				const errorMessage = submitError instanceof Error ? submitError.message : String(submitError);
+				throw new Error(`Payment submission failed: ${errorMessage}`);
+			}
+
+			console.log('PaymentModal: Payment submitted, confirming...');
+
+			// Confirm the payment
+			const { error } = await stripe.confirmPayment({
+				elements,
+				confirmParams: {
+					return_url: window.location.origin + '/payment-success',
+				},
+				redirect: 'if_required',
+			});
+
+			if (error) {
+				console.error('PaymentModal: Confirmation error:', error);
+				throw error;
+			}
+
+			console.log('PaymentModal: Payment confirmed successfully');
+
+			// Confirm payment on server
+			const confirmResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/confirm-payment`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+				},
+				body: JSON.stringify({
+					registration_id: window.currentRegistrationId,
+				}),
+			});
+
+			const confirmResult = await confirmResponse.json();
+			console.log('PaymentModal: Server confirmation result:', confirmResult);
+
+			if (!confirmResult.success) {
+				throw new Error('Payment confirmation failed on server');
+			}
+
+			// Close payment modal
+			closePaymentModal();
+			
+			// Show success message
+			showPaymentSuccess();
+
+		} catch (error) {
+			console.error('PaymentModal: Payment error:', error);
+			showPaymentError((error as any).message || 'Payment failed. Please try again.');
+		} finally {
+			setPaymentLoadingState(false);
+		}
+	}
+
+	function setPaymentLoadingState(loading: boolean) {
+		const submitPaymentBtn = document.getElementById('submit-payment') as HTMLButtonElement;
+		if (!submitPaymentBtn) return;
+		
+		const btnText = submitPaymentBtn.querySelector('.btn-text') as HTMLElement;
+		const btnLoader = submitPaymentBtn.querySelector('.btn-loader') as HTMLElement;
+		
+		if (loading) {
+			if (btnText) btnText.style.display = 'none';
+			if (btnLoader) btnLoader.style.display = 'flex';
+			submitPaymentBtn.disabled = true;
+		} else {
+			if (btnText) btnText.style.display = 'block';
+			if (btnLoader) btnLoader.style.display = 'none';
+			submitPaymentBtn.disabled = false;
+		}
+	}
+
+	function showPaymentSuccess() {
+		// This will be handled by the main registration component
+		console.log('PaymentModal: Payment successful');
+		alert('Payment successful! You will receive a confirmation email shortly.');
+	}
+
+	function showPaymentError(message: string) {
+		console.error('PaymentModal: Payment error:', message);
+		alert('Payment failed: ' + message);
+	}
+
+	// Global functions for external access
+	(window as any).closePaymentModal = closePaymentModal;
+	(window as any).setPaymentElements = function(elementsInstance: any, paymentElementInstance: any) {
+		elements = elementsInstance;
+		paymentElement = paymentElementInstance;
+		console.log('PaymentModal: Payment elements set');
+		console.log('PaymentModal: Elements:', elements);
+		console.log('PaymentModal: Payment element:', paymentElement);
+		
+		// Hide loading state and enable button
+		const loadingElement = document.getElementById('payment-loading');
+		const submitButton = document.getElementById('submit-payment') as HTMLButtonElement;
+		
+		if (loadingElement) {
+			loadingElement.style.display = 'none';
+		}
+		
+		if (submitButton) {
+			submitButton.disabled = false;
+		}
+		
+		// Verify elements are properly set
+		if (elements && typeof elements.submit === 'function') {
+			console.log('PaymentModal: Elements are ready for submission');
+		} else {
+			console.error('PaymentModal: Elements are not properly initialized');
+		}
+	};
+
+	function closePaymentModal() {
+		const modal = document.getElementById('paymentModal');
+		if (modal) {
+			modal.style.display = 'none';
+			document.body.style.overflow = 'auto';
+			
+			// Clean up Stripe elements
+			if (paymentElement) {
+				paymentElement.unmount();
+			}
+		}
+	}
+</script>
+
+<style>
+	.payment-modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 10000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+	}
+
+	.modal-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.8);
+		backdrop-filter: blur(10px);
+	}
+
+	.modal-content {
+		position: relative;
+		max-width: 500px;
+		width: 100%;
+		max-height: 90vh;
+		overflow-y: auto;
+		border-radius: 24px;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		background: rgba(10, 10, 10, 0.95);
+		backdrop-filter: blur(20px);
+	}
+
+	.modal-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 2rem 2rem 1rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.modal-header h3 {
+		color: white;
+		margin: 0;
+		font-size: 1.5rem;
+	}
+
+	.close-btn {
+		background: none;
+		border: none;
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 2rem;
+		cursor: pointer;
+		padding: 0;
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		transition: all 0.3s ease;
+	}
+
+	.close-btn:hover {
+		background: rgba(255, 255, 255, 0.1);
+		color: white;
+	}
+
+	.payment-info {
+		padding: 2rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.registration-summary h4 {
+		color: white;
+		margin-bottom: 1rem;
+		font-size: 1.2rem;
+	}
+
+	.summary-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem 0;
+		color: rgba(255, 255, 255, 0.8);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.summary-total {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem 0;
+		font-weight: 700;
+		font-size: 1.2rem;
+		color: white;
+	}
+
+	.price,
+	.total-price {
+		font-weight: 600;
+		color: #667eea;
+	}
+
+	.payment-form {
+		padding: 2rem;
+	}
+
+	#payment-element {
+		margin-bottom: 2rem;
+	}
+
+	.payment-loading {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 12px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.payment-loading .spinner {
+		border: 4px solid rgba(255, 255, 255, 0.3);
+		border-top: 4px solid #667eea;
+		border-radius: 50%;
+		width: 40px;
+		height: 40px;
+		animation: spin 1s linear infinite;
+		margin-bottom: 1rem;
+	}
+
+	.payment-loading p {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.9rem;
+		margin: 0;
+	}
+
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+
+	.payment-actions {
+		display: flex;
+		gap: 1rem;
+		flex-direction: column;
+	}
+
+	#submit-payment {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.payment-security {
+		padding: 2rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		text-align: center;
+	}
+
+	.security-badges {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		margin-bottom: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.security-badge {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 1rem;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 20px;
+		font-size: 0.9rem;
+		color: rgba(255, 255, 255, 0.8);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.security-icon {
+		font-size: 1rem;
+	}
+
+	.security-text {
+		color: rgba(255, 255, 255, 0.6);
+		font-size: 0.9rem;
+		margin: 0;
+	}
+
+	@media (max-width: 768px) {
+		.payment-modal {
+			padding: 1rem;
+		}
+
+		.modal-content {
+			max-height: 95vh;
+		}
+
+		.modal-header,
+		.payment-info,
+		.payment-form,
+		.payment-security {
+			padding: 1.5rem;
+		}
+
+		.payment-actions {
+			gap: 0.75rem;
+		}
+
+		.security-badges {
+			flex-direction: column;
+			align-items: center;
+		}
+	}
+</style>
